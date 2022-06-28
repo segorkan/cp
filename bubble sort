@@ -3,7 +3,7 @@
 а при равенстве баллов — по возрастанию идентификационных номеров. 
 Встроенные алгоритмы сортировки не использовать. */
 
-'''cpp
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -39,4 +39,4 @@ int main()
 		cout << nums[i].first << ' ' << nums[i].second << ' ' << '\n';
 	}
 }
-'''
+```
