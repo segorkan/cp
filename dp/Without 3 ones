@@ -1,3 +1,7 @@
+/*
+Count the number of sequences of 0 and 1 with the length of n where no 3 '1' stand near each other.
+*/
+
 #include <iostream>
 #include <vector>
  
