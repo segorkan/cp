@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+ 
+using namespace std;
+ 
+void dfs1(int v, vector <vector<int>> &graph, vector <bool> &used, vector <int> &tout) {
+    used[v] = true;
+    for (int u : graph[v]) {
+        if (!used[u])
+            dfs1(u, graph, used, tout);
+    }
+    tout.push_back(v);
+}
+
+void dfs2(int v, vector<vector<int>> &t, vector<int> &component, int &cnt_components) {
+    component[v] = cnt_components;
+    for (int u : t[v])
+        if (component[u] == 0)
+            dfs2(u, t, component, cnt_components);
+}
+
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> graph(n), t(n);
+    vector<int> tout, component(n);
+    vector <bool> used(n + 1);
+    int cnt_components = 1;
+
+    for (int i = 1; i <= m; i++) {
+        int h, h1;
+        cin >> h >> h1;
+        graph[h].push_back(h1);
+    }
+
+    for (int i = 0; i < n; i++) // сортируем все вершины в порядке выхода из dfs (лемма: tout(c) > tout(c1), при наличии ребра c -> c1. c и c1 - компоненты сильной связности)
+        if (!used[i])
+            dfs1(i, graph, used, tout);
+
+    for (int v = 0; v < n; v++) // поворачиваем все рёбра
+        for (int u : graph[v])
+            t[u].push_back(v);
+
+    reverse(tout.begin(), tout.end());
+    for (int v : tout) // component - массив с компонентами связности, cnt_components - номер компоненты
+        if (component[v] == 0)
+            dfs2(v, t, component, cnt_components), cnt_components++;
+    for (int i = 0; (int)i < component.size(); i++) cout << component[i] << ' ';
+}
