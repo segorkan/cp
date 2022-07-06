@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+	const long long INF = 1e8;
+	int n,m,s,f,mini,min_index,count=0;
+	cin >> n >> m >> s >> f;
+	vector <vector<int>> graph(n + 1, vector<int>(n + 1));
+	for (int i = 0; i < m; i++) {
+		int h, h1, h2;
+		cin >> h >> h1 >> h2;
+		graph[h][h1] = h2;
+		graph[h1][h] = h2;
+	}
+	vector <int> dist(n + 1, INF), ansarr;
+	vector <bool> used(n + 1, false);
+	vector <int> predki(n + 1, -1);
+	dist[s] = 0;
+	used[s] = true;
+	int cur = s;
+	for (int i = 0; i < n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (graph[cur][j] > 0 && dist[j] > dist[cur] + graph[cur][j]) {
+				dist[j] = dist[cur] + graph[cur][j];
+				predki[j] = cur;
+			}
+		}
+		mini = INF;
+		for (int j = 1; j <= n; j++) {
+			if (!used[j] && dist[j] < mini) {
+				mini = dist[j];
+				min_index = j;
+			}
+		}
+		used[min_index] = true;
+		cur = min_index;
+	}
+	cout << dist[f] << '\n';
+	int idx = f;
+	while (idx != s) {
+		ansarr.push_back(idx);
+		idx = predki[idx];
+		count++;
+	}
+	ansarr.push_back(s);
+	cout << count+1 << '\n';
+	reverse(ansarr.begin(), ansarr.end());
+	for (int i = 0; i < (int)ansarr.size(); i++) cout << ansarr[i] << ' ';
+}
