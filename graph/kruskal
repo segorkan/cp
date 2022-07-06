@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int n, m, weight, summ = 0, mint1, mint2;
+	cin >> n >> m;
+	vector <pair<int, pair<int, int>>> graph;
+	vector <int> color(n + 1);
+	for (int i = 0; i < m; i++) {
+		int h, h1, h2;
+		cin >> h >> h1 >> h2;
+		graph.push_back({ h2, {h, h1} });
+	}
+	for (int i = 1; i <= n; i++) {
+		color[i] = i;
+	}
+	sort(graph.begin(), graph.end());
+	for (int i = 0; (int)i < graph.size(); i++) {
+		weight = graph[i].first; mint1 = graph[i].second.first; mint2 = graph[i].second.second;
+		if (color[mint1] == color[mint2]) continue;
+		else {
+			summ += weight;
+			int cur = color[mint2];
+			for (int j = 1; j <= n; j++) {
+				if (color[j] == cur) color[j] = color[mint1];
+			}
+		}
+	}
+	cout << summ;
+}
