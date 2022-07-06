@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int n, m, weight = 0;
+	cin >> n >> m;
+	const long long INF = 1000000000;
+	vector <vector<int>> graph(n + 1, vector<int>(n + 1, INF));
+
+	for (int i = 0; i < m; i++) {
+		int h, h1, h2;
+		cin >> h >> h1 >> h2;
+		if (graph[h][h1] < h2) continue;
+		else {
+			graph[h][h1] = h2;
+			graph[h1][h] = h2;
+		}
+	}
+
+	vector<bool> used(n + 1);
+	vector<int> dist(n + 1, INF);
+	dist[1] = 0;
+	for (int i = 1; i <= n; ++i) {
+		int v = -1;
+		for (int j = 1; j <= n; ++j) {
+			if (!used[j] && (v == -1 || dist[j] < dist[v])) {
+				v = j;
+			}
+		}
+		used[v] = true;
+		weight += dist[v];
+		for (int to = 1; to <= n; ++to) {
+			if (graph[v][to] < dist[to]) {
+				dist[to] = graph[v][to];
+			}
+		}
+	}
+	cout << weight;
+}
