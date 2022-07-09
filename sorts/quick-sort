@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+ 
+using namespace std;
+ 
+ 
+void quick_sort(vector <int>& myarr, int l, int r) {
+	if (l < r) {
+		int x = myarr[l + rand() % (r - l)];
+		int i = l, j = r;
+		do {
+			while (myarr[i] < x) i++;
+			while (myarr[j] > x) j--;
+			if (i <= j) {
+				swap(myarr[i++], myarr[j--]);
+			}
+		} while (i <= j);
+ 
+		quick_sort(myarr, l, j);
+		quick_sort(myarr, i, r);
+	}
+}
+ 
+int main()
+{
+	int n;
+	cin >> n;
+	vector <int> myarr(n);
+	for (int i = 0; i < n; i++) cin >> myarr[i];
+	quick_sort(myarr, 0, n - 1);
+	for (int i = 0; i < n; i++) cout << myarr[i] << ' ';
+}
