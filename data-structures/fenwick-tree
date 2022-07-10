@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+vector <long long> fenwick;
+
+long long sum(long long i) {
+    long long sum = 0;
+    while (i > 0) {
+        sum += fenwick[i];
+        i -= i & -i;
+    }
+    return sum;
+}
+
+void add(long long i, long long k) {
+    while (i < (long long)fenwick.size()) {
+        fenwick[i] += k;
+        i += i & -i;
+    }
+}
+
+
+int main() {
+    long long n, m;
+    cin >> n >> m;
+    fenwick.resize(n + 1);
+    vector <long long> ansarr;
+    for (int i = 0; i < m; i++) {
+        string h; long long h1, h2;
+        cin >> h >> h1 >> h2;
+        if (h == "add") {
+            add(h1, h2);
+        }
+        else if (h == "rsq") {
+            ansarr.push_back(sum(h2) - sum(h1 - 1));
+        }
+    }
+    for (long long i = 0; i < (long long)ansarr.size(); i++) cout << ansarr[i] << '\n';
+}
