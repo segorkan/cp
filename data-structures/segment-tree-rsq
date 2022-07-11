@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+struct segtree {
+	
+	vector <long long> tree;
+	int size;
+
+	void init(int n) { // инициализируем дерево
+		size = 1;
+		while (size < n) size *= 2; // дополняем массив нулями до степени двойки
+		tree.assign(2*size-1,0); // заполняем нулями
+	}
+
+	// Идём от корня дерева до вершины рекурсивно, на выходе изменяем значения узлов
+	void set(int i, int v, int x, int lx, int rx) { // x - текущий узел, lx и rx - границы участка за который отвечает x
+		if (rx - lx == 1) { // если дошли до листа 
+			tree[x] = v; // текущее значение изменяем на новое
+			return;
+		}
+		int m = (lx + rx) / 2; // середина участка, за который отвечает x
+		if (i < m) { // если индекс изменяемого элемента меньше m, то идём в левую половину, иначе в правую
+			set(i, v, 2 * x + 1, lx, m);
+		}
+		else {
+			set(i, v, 2 * x + 2, m, rx);
+		}
+		tree[x] = tree[2 * x + 1] + tree[2 * x + 2]; // ставим новую сумму
+	}
+
+	void set(int i, int v) {
+		set(i, v, 0, 0, size);
+	}
+
+	// Собираем сумму от корня
+	long long sum(int l, int r, int x, int lx, int rx) {
+		if (l >= rx || lx >= r) { // если участок за который отвечает x не входит в диапазон, то пропускаем
+			return 0;
+		}
+		if (lx >= l && rx <= r) { // если участок полностью входит в диапазон, то используем всю сумму на нём
+			return tree[x];
+		}
+		// если участок частично входит в диапазон, идём ниже в оба поддерева пока не выполнится первое или второе условие
+		int m = (lx + rx) / 2;
+		long long s1 = sum(l, r, 2 * x + 1, lx, m);
+		long long s2 = sum(l, r, 2 * x + 2, m, rx);
+		return s1 + s2;
+	}
+
+	long long sum(int l, int r) {
+		return sum(l, r, 0, 0, size);
+	}
+};
+
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int n, m;
+	cin >> n >> m;
+	vector <int> ansarr;
+	segtree st;
+	st.init(n);
+	for (int i = 0; i < n; i++) {
+		int v; cin >> v;
+		st.set(i, v);
+	}
+	for (int i = 0; i < m; i++) {
+		int h, h1, h2;
+		cin >> h >> h1 >> h2;
+		if (h == 1) {
+			st.set(h1, h2);
+		}
+		else if (h == 2) {
+			ansarr.push_back(st.sum(h1, h2));
+		}
+	}
+	return 0;
+}
