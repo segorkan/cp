@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+int n,k;
+vector<int>a;
+
+void rec(int idx, int last) {
+	if (idx == k) {
+		for (int i = 0; i < k; i++) {
+			cout << a[i] << ' ';
+		}
+		cout << '\n';
+		return;
+	}
+	for (int i = last + 1; i <= n; i++) {
+		a.push_back(i);
+		rec(idx+1,i);
+		a.pop_back();
+	}
+}
+
+int main()
+{
+	cin >> n >> k;
+	rec(0, 0);
+}
