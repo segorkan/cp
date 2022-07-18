@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+long long powe(long long num, long long deg) {
+    long long res = 1;
+    while (deg) {
+        if (deg % 2 == 0) {
+            deg /= 2;
+            num *= num;
+        }
+        else {
+            deg--;
+            res *= num;
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    int t, p;
+    cin >> t >> p;
+    cout << powe(t, p);
+}
