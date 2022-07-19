@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void dfs(int v, vector <int>& color, vector<vector<int>>& graph, int cur, bool &check) {
+    color[v] = cur;
+    for (int u : graph[v]) {
+        if (color[u] == cur) {
+            check = true;
+            return;
+        }
+        else if (color[u] == 0) {
+            if (cur == 1) {
+                dfs(u, color, graph, 2, check);
+            }
+            if (cur == 2) {
+                dfs(u, color, graph, 1, check);
+            }
+        }
+    }
+}
+
+
+int main()
+{
+    int n, m; bool check = false;
+    cin >> n >> m;
+    vector<vector<int>> graph(n + 1);
+    vector <int> color(n + 1, 0);
+
+    for (int i = 1; i <= m; i++) {
+        int h, h1;
+        cin >> h >> h1;
+        graph[h].push_back(h1);
+        graph[h1].push_back(h);
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        if (color[i] == 0) {
+            dfs(m, color, graph, 1, check);
+        }
+    }
+    if (!check) cout << "Bipartite";
+}
