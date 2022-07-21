@@ -1,0 +1,31 @@
+// https://informatics.msk.ru/mod/statements/view.php?id=11221&chapterid=112186#1 (Перевод в систему счисления от 2 до 36)
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <string>
+
+using namespace std;
+
+vector <char> nums = { '0','1', '2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+void nRep(int n, int k, string &res) {
+	if (n < k) {
+		res += nums[n];
+		return;
+	}
+	res += nums[n%k];
+	nRep(n / k, k, res);
+}
+
+int main()
+{
+	int n,k;
+	cin >> n >> k;
+	string res = "";
+	nRep(abs(n), k, res);
+	reverse(res.begin(), res.end());
+	if (n < 0) cout << '-' << res;
+	else cout << res;
+}
