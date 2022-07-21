@@ -1,0 +1,54 @@
+// https://informatics.msk.ru/mod/statements/view.php?id=11221&chapterid=112182#1
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+int binpow(int num, int deg) {
+	int res = 1;
+	while (deg) {
+		if (deg % 2 == 0) {
+			deg /= 2;
+			num *= num;
+		}
+		else {
+			deg--;
+			res *= num;
+		}
+	}
+	return res;
+}
+
+void binaryRep(int num, int count, string &res) {
+	if (num == 0) {
+		return;
+	}
+	int y = binpow(2, count);
+	if (num - y >= 0) {
+		res = res + '1';
+		binaryRep(num - y, count-1, res);
+	}
+	else {
+		res = res + '0';
+		binaryRep(num, count-1, res);
+	}
+}
+
+
+int main()
+{
+	int n, count = 0, ab = 1;
+	string res = "";
+	cin >> n;
+	while (ab*2 <= abs(n)) {
+		count++;
+		ab *= 2;
+	}
+	binaryRep(abs(n), count, res);
+	while (res.size() < count + 1) res += '0';
+	if (n < 0) cout << '-' << res;
+	else cout << res;
+}
