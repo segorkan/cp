@@ -1,0 +1,40 @@
+// Наибольшая общая подпоследовательность (НОП)
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+typedef long long ll;
+using namespace std;
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	vector <int> myarr(n+1);
+	for (int i = 1; i <= n; ++i) cin >> myarr[i];
+	int m;
+	cin >> m;
+	vector <int> myarr2(m+1);
+	for (int i = 1; i <= m; ++i) cin >> myarr2[i];
+	vector <vector <int>> dp(n + 1, vector<int>(n + 1));
+	for (int i = 0; i <= n; ++i) {
+		dp[i][0] = 0;
+	}
+	for (int j = 0; j <= n; ++j) {
+		dp[0][j] = 0;
+	}
+	for (int i = 1; i <= n; ++i) {
+		for (int j = 1; j <= n; ++j) {
+			if (myarr[i] == myarr2[j]) {
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+			}
+			else {
+				dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
+	}
+	cout << dp[n][m];
+}
